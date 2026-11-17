@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Envíos & Rastreo | La Niebla Store - Dead by Daylight</title>
+  <meta name="description" content="Información de envíos, empaque protegido y rastreador en vivo de pedidos de Dead by Daylight en La Niebla Store. Envíos express y estándar.">
+  <meta name="keywords" content="Envíos DBD, Rastreo DBD, Seguimiento de paquetes, Dead by Daylight Tienda, Empaque Coleccionista">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
+</head>
+<body>
+
+  <!-- Ambient Fog & Campfire Embers Simulation Canvas -->
+  <canvas id="fogCanvas"></canvas>
+
+  <div class="app-wrapper">
+
+    <!-- SITE HEADER -->
+    <header class="site-header">
+      <div class="container nav-content">
+        <a href="index.html" class="brand-logo" id="brandLogo">
+          <div class="brand-icon-wrap">
+            <span>🩸</span>
+          </div>
+          <div class="brand-text-block">
+            <span class="brand-title">LA NIEBLA STORE</span>
+            <span class="brand-subtitle">Colecciona · Viste · Sobrevive</span>
+          </div>
+        </a>
+
+        <nav>
+          <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="drops.html">Drops & Lealtad</a></li>
+            <li><a href="envios.html" class="active">Envíos & Rastreo</a></li>
+            <li><a href="nosotros.html">Nosotros</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-actions">
+          <!-- Audio Ambience Toggle -->
+          <button class="btn-audio-toggle" id="audioToggleBtn" title="Activar/Desactivar sonido ambiental de la fogata">
+            <span class="audio-icon">🔇</span>
+            <span class="audio-text">Sonido</span>
+          </button>
+
+          <!-- Skill Check Minigame Trigger -->
+          <button class="btn-skillcheck-header open-skillcheck-trigger" title="Jugar prueba de habilidad para ganar hasta un 20% de descuento">
+            <span>⚙️</span>
+            <span class="btn-text">Skill Check (20% OFF)</span>
+          </button>
+
+          <!-- Cart Toggle -->
+          <button class="btn-cart-toggle" id="cartToggleBtn" aria-label="Ver Carrito de Compras">
+            <span>🛒</span>
+            <span class="cart-label">Carrito</span>
+            <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+          </button>
+
+          <!-- Mobile Toggle -->
+          <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Abrir menú de navegación">
+            ☰
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <div class="mobile-nav-drawer" id="mobileNavDrawer">
+        <div class="mobile-drawer-header">
+          <div class="brand-logo">
+            <div class="brand-icon-wrap" style="width:34px; height:34px; font-size:16px;">
+              <span>🩸</span>
+            </div>
+            <span class="brand-title" style="font-size:1rem;">LA NIEBLA STORE</span>
+          </div>
+          <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Cerrar menú">&times;</button>
+        </div>
+        <ul class="mobile-nav-links-list">
+          <li><a href="index.html" class="mobile-nav-link"><span>🏠</span> Inicio</a></li>
+          <li><a href="catalogo.html" class="mobile-nav-link"><span>🛍️</span> Catálogo Completo</a></li>
+          <li><a href="drops.html" class="mobile-nav-link"><span>🎁</span> Drops & Lealtad</a></li>
+          <li><a href="envios.html" class="mobile-nav-link active"><span>📦</span> Envíos & Rastreo</a></li>
+          <li><a href="nosotros.html" class="mobile-nav-link"><span>🕯️</span> Manifiesto y Almacén</a></li>
+          <li><a href="#" class="mobile-nav-link open-skillcheck-trigger"><span>⚙️</span> Probar Skill Check (20% OFF)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <main>
+      <!-- SUBPAGE HERO -->
+      <section class="page-hero-section">
+        <div class="container">
+          <div class="page-breadcrumbs">
+            <a href="index.html">Inicio</a>
+            <span class="sep">/</span>
+            <span>Envíos & Rastreo</span>
+          </div>
+          <h1 class="section-title" style="font-size: clamp(2.2rem, 4vw, 3.4rem); margin-bottom: 8px;">
+            Logística & Rastreo en Vivo
+          </h1>
+          <p class="section-desc" style="max-width: 720px;">
+            Consulta el estado de tu paquete en tiempo real o revisa nuestras opciones de entrega express con empaque temático protegido contra daños de la bruma.
+          </p>
+        </div>
+      </section>
+
+      <!-- LIVE TRACKING SIMULATOR -->
+      <section class="business-section" style="padding-top: 30px;">
+        <div class="container">
+          <div class="tracking-card">
+            <header class="section-header" style="margin-bottom: 20px;">
+              <span class="section-tag">01 / RASTREADOR DE BOTÍN EN LA NIEBLA</span>
+              <h2 style="font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                Ingresa tu Código de Pedido
+              </h2>
+              <p style="color: #8e9aaf; font-size: 0.88rem;">
+                Ingresa el código alfanumérico que recibiste al completar tu orden (ej. <code>DBD-MERCH-849201</code>) o prueba con el código de demostración.
+              </p>
+            </header>
+
+            <form id="trackingForm">
+              <div class="tracking-input-row">
+                <input type="text" id="trackingInput" class="tracking-input" placeholder="Ej. DBD-MERCH-849201" value="DBD-MERCH-849201" required autocomplete="off">
+                <button type="submit" class="btn-dbd btn-killer">
+                  <span>🔍</span> Rastrear Paquete
+                </button>
+                <button type="button" class="btn-dbd btn-survivor" id="trackFillDemoBtn">
+                  <span>🎲</span> Código Demo
+                </button>
+              </div>
+            </form>
+
+            <!-- Tracking Result Box -->
+            <div class="tracking-result-box" id="trackingResultBox">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                <div>
+                  <span style="font-size: 0.72rem; color: #8e9aaf; text-transform: uppercase; letter-spacing: 1px;">PEDIDO:</span>
+                  <strong style="color: #fff; font-family: var(--font-mono); font-size: 1.15rem; margin-left: 6px;" id="trackCodeDisplay">DBD-MERCH-849201</strong>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <span class="status-ember" style="background: #ff4d6d; box-shadow: 0 0 10px #ff4d6d;"></span>
+                  <span style="color: #ff99aa; font-weight: 700; font-size: 0.85rem;">EN TRÁNSITO · ENTREGA ESTIMADA MAÑANA</span>
+                </div>
+              </div>
+
+              <!-- Tracking Timeline -->
+              <ul class="tracking-timeline">
+                <li class="tracking-step done">
+                  <div class="tracking-dot">✓</div>
+                  <div class="tracking-step-title">Orden Confirmada & Pago Aprobado</div>
+                  <div class="tracking-step-desc">El Ente aprobó la ofrenda y reservó tus artículos en el almacén de MacMillan Estate.</div>
+                  <div class="tracking-step-time">Ayer · 14:22 hrs</div>
+                </li>
+                <li class="tracking-step done">
+                  <div class="tracking-dot">✓</div>
+                  <div class="tracking-step-title">Inspección de Calidad & Empaque de Seguridad</div>
+                  <div class="tracking-step-desc">Tus hoodies y figuras fueron empacadas en caja rígida sellada con cinta del Ente y sticker de colección.</div>
+                  <div class="tracking-step-time">Hoy · 09:15 hrs</div>
+                </li>
+                <li class="tracking-step current">
+                  <div class="tracking-dot">●</div>
+                  <div class="tracking-step-title">En Tránsito con el Mensajero de la Bruma</div>
+                  <div class="tracking-step-desc">El paquete pasó la Puerta de Salida y está en ruta hacia el centro de distribución local.</div>
+                  <div class="tracking-step-time">Hoy · 16:40 hrs (Actualización más reciente)</div>
+                </li>
+                <li class="tracking-step">
+                  <div class="tracking-dot">○</div>
+                  <div class="tracking-step-title">Listo para Entrega en Domicilio / Refugio</div>
+                  <div class="tracking-step-desc">El repartidor te contactará antes de llegar para asegurar que estés en casa.</div>
+                  <div class="tracking-step-time">Pendiente · Mañana antes de las 18:00 hrs</div>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SHIPPING MODES TABLE -->
+      <section class="business-section">
+        <div class="container">
+          <header class="section-header">
+            <span class="section-tag">02 / VELOCIDADES DE ENTREGA</span>
+            <h2 class="section-title">Modalidades de Envío Disponibles</h2>
+            <p class="section-desc">Selecciona el método que mejor se adapte a tu urgencia al momento de finalizar tu compra.</p>
+          </header>
+
+          <div class="daypart-grid">
+            <article style="border-top-color: #ff204e;">
+              <span class="benefit-kicker" style="color: #ff4d6d;">MÁS RÁPIDO · 24 A 48 HORAS</span>
+              <h3>Sprint Burst Express</h3>
+              <p>Prioridad 1 en bodega. Despacho en menos de 12 horas con entrega prioritaria garantizada por paquetería de primer nivel.</p>
+              <div style="margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; display: flex; justify-content: space-between; font-size: 0.84rem;">
+                <span style="color: #8e9aaf;">Costo:</span>
+                <strong style="color: #fff;">$149 MXN (Gratis > $1,299)</strong>
+              </div>
+            </article>
+
+            <article style="border-top-color: #c5ad82;">
+              <span class="benefit-kicker" style="color: #c5ad82;">RECOMENDADO · 3 A 5 DÍAS</span>
+              <h3>Urban Evasion Estándar</h3>
+              <p>El balance perfecto entre costo y rapidez. Incluye código de seguimiento completo y seguro total contra pérdidas o golpes.</p>
+              <div style="margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; display: flex; justify-content: space-between; font-size: 0.84rem;">
+                <span style="color: #8e9aaf;">Costo:</span>
+                <strong style="color: #fff;">$89 MXN (Gratis > $699)</strong>
+              </div>
+            </article>
+
+            <article style="border-top-color: #52b788;">
+              <span class="benefit-kicker" style="color: #52b788;">FLEXIBLE · A TU HORA</span>
+              <h3>Casilleros Pick-Up Point</h3>
+              <p>Recoge tu paquete en más de 2,500 puntos autorizados y tiendas de conveniencia sin tener que esperar en casa al repartidor.</p>
+              <div style="margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; display: flex; justify-content: space-between; font-size: 0.84rem;">
+                <span style="color: #8e9aaf;">Costo:</span>
+                <strong style="color: #fff;">$69 MXN (Tarifa fija)</strong>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- UNBOXING & PACKAGING GUARANTEE -->
+      <section class="business-section service-section" style="background: #11150f;">
+        <div class="container service-layout">
+          <header class="section-header">
+            <span class="section-tag">03 / EXPERIENCIA DE UNBOXING</span>
+            <h2 class="section-title">El sello que cuida<br>cada coleccionable.</h2>
+            <p class="section-desc">
+              Sabemos el valor que tiene cada pieza para un fan. Por eso no utilizamos sobres de plástico delgados: cada orden se empaca en cajas rígidas con papel kraft satinado y plástico de alta densidad.
+            </p>
+            <p class="service-footnote">Cero piezas rotas en más de 12,000 envíos despachados.</p>
+          </header>
+          <ol class="service-steps">
+            <li><span>01</span><div><h3>Caja Reforzada de Doble Pared</h3><p>Protección contra caídas y aplastamiento durante el tránsito.</p></div><strong>Blindada</strong></li>
+            <li><span>02</span><div><h3>Cinta de Seguridad del Ente</h3><p>Cinta inviolable con advertencia carmesí que delata si fue abierta.</p></div><strong>Segura</strong></li>
+            <li><span>03</span><div><h3>Papel Kraft & Relleno Antigolpes</h3><p>Burbujas gruesas y viruta amortiguadora para cerámicas y resinas.</p></div><strong>Acolchada</strong></li>
+            <li><span>04</span><div><h3>Sticker & Tarjeta de Autenticidad</h3><p>Regalo sorpresa incluido en cada pedido sin costo adicional.</p></div><strong>Coleccionable</strong></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- FREQUENTLY ASKED QUESTIONS (FAQ) -->
+      <section class="business-section">
+        <div class="container">
+          <header class="section-header">
+            <span class="section-tag">04 / PREGUNTAS FRECUENTES</span>
+            <h2 class="section-title">Dudas Comunes de los Supervivientes</h2>
+          </header>
+
+          <div class="benefits-grid">
+            <article class="benefit-card">
+              <span class="benefit-kicker">CAMBIOS Y DEVOLUCIONES</span>
+              <h3>¿Qué pasa si la hoodie no me queda?</h3>
+              <p>Tienes 30 días para solicitar cambio de talla totalmente gratis. Solo mantén las etiquetas puestas y te generamos una guía de retorno sin costo adicional.</p>
+            </article>
+
+            <article class="benefit-card">
+              <span class="benefit-kicker">ENVÍOS INTERNACIONALES</span>
+              <h3>¿Envían fuera de México?</h3>
+              <p>¡Sí! Enviamos a toda América Latina (Colombia, Chile, Argentina, Perú) y España mediante servicio internacional con número de rastreo rastreable en Correos.</p>
+            </article>
+
+            <article class="benefit-card">
+              <span class="benefit-kicker">GARANTÍA DE FIGURAS</span>
+              <h3>¿Qué pasa si mi figura llega dañada?</h3>
+              <p>Te enviamos una pieza de reemplazo inmediatamente sin esperar a que devuelvas la dañada. Basta con mandarnos una foto del paquete a nuestro correo o WhatsApp.</p>
+            </article>
+
+            <article class="benefit-card">
+              <span class="benefit-kicker">MÉTODOS DE PAGO</span>
+              <h3>¿Qué formas de pago aceptan?</h3>
+              <p>Aceptamos tarjetas de débito y crédito (Visa, Mastercard, Amex), PayPal, transferencias bancarias SPEI y pago en efectivo en tiendas de conveniencia OXXO.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="brand-logo">
+              <div class="brand-icon-wrap">
+                <span>🩸</span>
+              </div>
+              <div>
+                <span class="brand-title">LA NIEBLA STORE</span>
+                <span class="brand-subtitle">Colecciona · Viste · Sobrevive</span>
+              </div>
+            </div>
+            <p>
+              Tienda oficial de merchandising temático inspirado en Dead by Daylight. Ropa, snacks, llaveros, peluches, figuras y réplicas de coleccionista.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Páginas</h4>
+            <ul>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="catalogo.html">Catálogo Completo</a></li>
+              <li><a href="drops.html">Drops Semanales</a></li>
+              <li><a href="envios.html">Envíos & Rastreo</a></li>
+              <li><a href="nosotros.html">Manifiesto & Almacén</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Categorías</h4>
+            <ul>
+              <li><a href="catalogo.html?cat=snacks">Snacks & Dulces</a></li>
+              <li><a href="catalogo.html?cat=ropa">Ropa & Streetwear</a></li>
+              <li><a href="catalogo.html?cat=llaveros">Llaveros & Pins</a></li>
+              <li><a href="catalogo.html?cat=peluches">Peluches & Figuras</a></li>
+              <li><a href="catalogo.html?cat=coleccion">Colección & Réplicas</a></li>
+              <li><a href="catalogo.html?cat=posters">Posters & Decoración</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Servicio al Cliente</h4>
+            <ul>
+              <li>Envíos a todo México & LATAM</li>
+              <li>Despachos de Lun a Vie</li>
+              <li>Garantía de satisfacción 30 días</li>
+              <li>Soporte: contacto@lanieblastore.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© 2026 La Niebla Store - Merchandising inspirado en el universo Dead by Daylight creado por Behaviour Interactive. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Cart Drawer, Skill Check & Modals -->
+  <div class="cart-drawer-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Carrito de compras">
+    <div class="cart-drawer-header">
+      <h3 class="cart-drawer-title">
+        <span>🛒</span> Tu Carrito de Botín (<span id="cartItemsCount">0 artículos</span>)
+      </h3>
+      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Cerrar carrito">&times;</button>
+    </div>
+    <div class="cart-items-container" id="cartItemsList"></div>
+    <div class="cart-empty-state" id="cartEmptyState">
+      <span class="cart-empty-icon">🎒</span>
+      <h4>Tu carrito está vacío</h4>
+      <p>Explora el catálogo y añade snacks, ropa o coleccionables a tu orden.</p>
+      <a href="catalogo.html" class="btn-dbd btn-ghost" onclick="window.dbdApp.cart.closeDrawer()">
+        <span>🔍</span> Ver Catálogo
+      </a>
+    </div>
+    <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
+      <div class="coupon-section">
+        <input type="text" id="cartCouponInput" class="coupon-input" placeholder="Código de descuento (ej. HEX:RUIN20)" autocomplete="off">
+        <button class="btn-coupon" id="cartApplyCouponBtn">Aplicar</button>
+      </div>
+      <div class="cart-summary-rows">
+        <div class="summary-row">
+          <span>Equivalente en Bloodpoints:</span>
+          <span id="cartSubtotalBP">0 BP</span>
+        </div>
+        <div class="summary-row" id="cartDiscountRow" style="display: none; color: #ff9100;">
+          <span>Descuento de la Niebla:</span>
+          <span id="cartDiscountAmount">-0%</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total a Pagar:</span>
+          <span id="cartTotalMoney">$0.00 MXN</span>
+        </div>
+      </div>
+      <button class="btn-dbd btn-killer btn-checkout" id="cartCheckoutBtn">
+        <span>🔥</span>
+        <span class="btn-text">Proceder al Pago / Ordenar</span>
+      </button>
+    </div>
+  </aside>
+
+  <div id="skillCheckContainer"></div>
+
+  <div class="modal-backdrop" id="orderConfirmationModal">
+    <div class="modal-card" style="max-width: 520px; text-align: center; padding: 30px;">
+      <button class="modal-close" id="orderConfirmationClose">&times;</button>
+      <span style="font-size: 3.5rem; display: block; margin-bottom: 12px;">🩸</span>
+      <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: #fff; margin-bottom: 6px;">¡Orden Recibida en la Niebla!</h3>
+      <p style="color: #8e9aaf; font-size: 0.9rem; margin-bottom: 20px;">Tu pedido ha sido registrado en nuestro almacén. El equipo está preparando tu paquete con sello conmemorativo del Ente.</p>
+      <div class="res-ticket">
+        <div class="res-ticket-header">
+          <span>CÓDIGO DE RASTREO: <strong id="receiptOrderCode">DBD-MERCH-000000</strong></span>
+        </div>
+        <div id="receiptItemsList" style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #c9d1d9;"></div>
+        <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: #ff4d6d;">
+          <span>Bloodpoints Acumulados:</span>
+          <span id="receiptTotalBP">0 BP</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1.1rem; color: #fff; margin-top: 4px;">
+          <span>Total de la Orden:</span>
+          <span id="receiptTotalMoney">$0.00 MXN</span>
+        </div>
+      </div>
+      <button class="btn-dbd btn-survivor" style="width: 100%;" onclick="document.getElementById('orderConfirmationModal').classList.remove('active')">
+        <span>✅</span> ¡Excelente, a esperar el botín!
+      </button>
+    </div>
+  </div>
+
+  <!-- Main JavaScript App (ES Modules) -->
+  <script type="module" src="scripts/app.js"></script>
+
+</body>
+</html>

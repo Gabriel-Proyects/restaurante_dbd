@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drops & Lealtad | La Niebla Store - Dead by Daylight</title>
+  <meta name="description" content="Drops semanales exclusivos y Pasaporte de Coleccionista de Dead by Daylight. Reúne sellos, acumula Bloodpoints y desbloquea pines dorados y preventas secretas.">
+  <meta name="keywords" content="Drops DBD, Lealtad DBD, Pasaporte Coleccionista, Bloodpoints, Dead by Daylight Merch">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
+</head>
+<body>
+
+  <!-- Ambient Fog & Campfire Embers Simulation Canvas -->
+  <canvas id="fogCanvas"></canvas>
+
+  <div class="app-wrapper">
+
+    <!-- SITE HEADER -->
+    <header class="site-header">
+      <div class="container nav-content">
+        <a href="index.html" class="brand-logo" id="brandLogo">
+          <div class="brand-icon-wrap">
+            <span>🩸</span>
+          </div>
+          <div class="brand-text-block">
+            <span class="brand-title">LA NIEBLA STORE</span>
+            <span class="brand-subtitle">Colecciona · Viste · Sobrevive</span>
+          </div>
+        </a>
+
+        <nav>
+          <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="drops.html" class="active">Drops & Lealtad</a></li>
+            <li><a href="envios.html">Envíos & Rastreo</a></li>
+            <li><a href="nosotros.html">Nosotros</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-actions">
+          <!-- Audio Ambience Toggle -->
+          <button class="btn-audio-toggle" id="audioToggleBtn" title="Activar/Desactivar sonido ambiental de la fogata">
+            <span class="audio-icon">🔇</span>
+            <span class="audio-text">Sonido</span>
+          </button>
+
+          <!-- Skill Check Minigame Trigger -->
+          <button class="btn-skillcheck-header open-skillcheck-trigger" title="Jugar prueba de habilidad para ganar hasta un 20% de descuento">
+            <span>⚙️</span>
+            <span class="btn-text">Skill Check (20% OFF)</span>
+          </button>
+
+          <!-- Cart Toggle -->
+          <button class="btn-cart-toggle" id="cartToggleBtn" aria-label="Ver Carrito de Compras">
+            <span>🛒</span>
+            <span class="cart-label">Carrito</span>
+            <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+          </button>
+
+          <!-- Mobile Toggle -->
+          <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Abrir menú de navegación">
+            ☰
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <div class="mobile-nav-drawer" id="mobileNavDrawer">
+        <div class="mobile-drawer-header">
+          <div class="brand-logo">
+            <div class="brand-icon-wrap" style="width:34px; height:34px; font-size:16px;">
+              <span>🩸</span>
+            </div>
+            <span class="brand-title" style="font-size:1rem;">LA NIEBLA STORE</span>
+          </div>
+          <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Cerrar menú">&times;</button>
+        </div>
+        <ul class="mobile-nav-links-list">
+          <li><a href="index.html" class="mobile-nav-link"><span>🏠</span> Inicio</a></li>
+          <li><a href="catalogo.html" class="mobile-nav-link"><span>🛍️</span> Catálogo Completo</a></li>
+          <li><a href="drops.html" class="mobile-nav-link active"><span>🎁</span> Drops & Lealtad</a></li>
+          <li><a href="envios.html" class="mobile-nav-link"><span>📦</span> Envíos & Rastreo</a></li>
+          <li><a href="nosotros.html" class="mobile-nav-link"><span>🕯️</span> Manifiesto y Almacén</a></li>
+          <li><a href="#" class="mobile-nav-link open-skillcheck-trigger"><span>⚙️</span> Probar Skill Check (20% OFF)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <main>
+      <!-- SUBPAGE HERO -->
+      <section class="page-hero-section">
+        <div class="container">
+          <div class="page-breadcrumbs">
+            <a href="index.html">Inicio</a>
+            <span class="sep">/</span>
+            <span>Drops & Lealtad</span>
+          </div>
+          <h1 class="section-title" style="font-size: clamp(2.2rem, 4vw, 3.4rem); margin-bottom: 8px;">
+            Drops del Ente & Recompensas
+          </h1>
+          <p class="section-desc" style="max-width: 700px;">
+            Lanzamientos exclusivos cada viernes, tirajes ultralimitados y un pasaporte de coleccionista digital donde cada compra te acerca a recompensas iridiscentes.
+          </p>
+        </div>
+      </section>
+
+      <!-- ACTIVE DROP SPOTLIGHT -->
+      <section class="business-section" style="padding: 50px 0;">
+        <div class="container">
+          <div style="background: linear-gradient(135deg, #220f14, #121512); border: 1px solid #c43d3460; border-radius: var(--radius-md); padding: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;" class="service-layout">
+            <div>
+              <span class="benefit-kicker" style="color: #ff4d6d; letter-spacing: 2px;">⚡ DROP DE ESTA SEMANA · VIERNES 20:00 HRS</span>
+              <h2 style="font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 14px; line-height: 1.15;">
+                Edición "All-Kill: Neon Slaughter"
+              </h2>
+              <p style="color: #c9d1d9; font-size: 0.95rem; line-height: 1.7; margin-bottom: 22px;">
+                La colección cápsula inspirada en Ji-Woon Hak (The Trickster). Incluye la sudadera violeta neón reactiva a luz UV, el póster serigrafiado de gira musical sangrienta y las latas de colección de Blight Serum en empaque especial.
+              </p>
+              <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px;">
+                <span class="ingredient-badge" style="border-color: #ff0055; color: #ff6b9d;">💎 Tiraje Limitado a 500 Unidades</span>
+                <span class="ingredient-badge" style="border-color: #ff9100; color: #ffad33;">🔥 Incluye Tarjeta Numerada</span>
+                <span class="ingredient-badge" style="border-color: #52b788; color: #70e000;">🎁 Sticker Holográfico de Regalo</span>
+              </div>
+              <div style="display: flex; gap: 14px;">
+                <a href="catalogo.html?cat=ropa" class="btn-dbd btn-killer">
+                  <span>🛍️</span> Comprar Drop Ahora
+                </a>
+                <a href="#pasaporte" class="btn-dbd btn-survivor">
+                  <span>📜</span> Ver Mi Pasaporte
+                </a>
+              </div>
+            </div>
+
+            <div style="background: rgba(12, 14, 12, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 28px; text-align: center;">
+              <span style="font-size: 4rem; display: block; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(255, 32, 78, 0.6));">🎤</span>
+              <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 6px;">Cápsula Trickster Neon</h3>
+              <p style="color: #929b87; font-size: 0.84rem; margin-bottom: 18px;">Prendas con serigrafía UV reactiva y acabados pesados</p>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px;">
+                <div>
+                  <strong style="color: #fff; font-size: 1.2rem; display: block;">$789</strong>
+                  <span style="color: #8e9aaf; font-size: 0.72rem;">Sudadera Neón</span>
+                </div>
+                <div>
+                  <strong style="color: #fff; font-size: 1.2rem; display: block;">$269</strong>
+                  <span style="color: #8e9aaf; font-size: 0.72rem;">Póster UV Tour</span>
+                </div>
+                <div>
+                  <strong style="color: #fff; font-size: 1.2rem; display: block;">$95</strong>
+                  <span style="color: #8e9aaf; font-size: 0.72rem;">Bebida Suero</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INTERACTIVE PASSPORT SECTION -->
+      <section class="business-section" id="pasaporte" style="background: #11140f;">
+        <div class="container">
+          <header class="section-header">
+            <span class="section-tag">02 / PROGRAMA DE LEALTAD EXCLUSIVO</span>
+            <h2 class="section-title">El Pasaporte del Coleccionista</h2>
+            <p class="section-desc">
+              Cada pedido en La Niebla Store suma un sello a tu pasaporte. Haz clic en los sellos a continuación para previsualizar los premios desbloqueables en cada nivel.
+            </p>
+          </header>
+
+          <div style="background: linear-gradient(135deg, #271b17, #151712); border: 1px solid #ac9c7860; border-radius: var(--radius-md); padding: 36px; max-width: 900px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+              <div>
+                <span class="benefit-kicker" style="margin-bottom: 4px;">TU CUENTA DE SUPERVIVIENTE</span>
+                <h3 style="font-size: 1.5rem; color: #fff; margin: 0;">5 Compras = Recompensa Iridiscente</h3>
+              </div>
+              <span class="ingredient-badge" style="border-color: #edc491; color: #edc491; font-family: var(--font-mono);">
+                PRESTIGIO: NIVEL III
+              </span>
+            </div>
+
+            <p style="color: #b0b6a6; font-size: 0.9rem; margin-bottom: 28px;">
+              ¡Haz clic en cualquiera de los sellos para simular el sellado y consultar el beneficio exacto que ganarás!
+            </p>
+
+            <!-- Interactive Stamp Circles -->
+            <div class="passport-stamps" style="display: flex; justify-content: space-between; gap: 14px; margin-bottom: 30px;">
+              <span class="interactive-stamp stamped" title="Clic para consultar">01</span>
+              <span class="interactive-stamp stamped" title="Clic para consultar">02</span>
+              <span class="interactive-stamp" title="Clic para consultar">03</span>
+              <span class="interactive-stamp" title="Clic para consultar">04</span>
+              <span class="interactive-stamp" title="Clic para consultar">05</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; border-top: 1px dashed rgba(255, 255, 255, 0.12); padding-top: 24px;">
+              <div>
+                <strong style="color: #ff9100; font-size: 0.85rem; display: block; margin-bottom: 4px;">Sello 01 & 02:</strong>
+                <p style="color: #8e9aaf; font-size: 0.8rem; margin: 0;">10,000 BP de bienvenida + Envío gratis en tu segundo pedido.</p>
+              </div>
+              <div>
+                <strong style="color: #ff9100; font-size: 0.85rem; display: block; margin-bottom: 4px;">Sello 03 & 04:</strong>
+                <p style="color: #8e9aaf; font-size: 0.8rem; margin: 0;">10% OFF permanente en snacks + Acceso VIP a preventas.</p>
+              </div>
+              <div>
+                <strong style="color: #ff4d6d; font-size: 0.85rem; display: block; margin-bottom: 4px;">Sello 05 (IRIDISCENTE):</strong>
+                <p style="color: #8e9aaf; font-size: 0.8rem; margin: 0;">Pin de Oro 18k Hex Perk de regalo físico + 25% de descuento.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- UPCOMING DROPS CALENDAR -->
+      <section class="business-section">
+        <div class="container">
+          <header class="section-header">
+            <span class="section-tag">03 / CALENDARIO DE LANZAMIENTOS</span>
+            <h2 class="section-title">Próximos Tesoros en Camino</h2>
+            <p class="section-desc">Anticipa los drops de las siguientes semanas. Suscríbete para recibir recordatorio 1 hora antes de que abran al público general.</p>
+          </header>
+
+          <div class="daypart-grid">
+            <article>
+              <span class="benefit-kicker">PRÓXIMO VIERNES</span>
+              <h3>Cápsula "Haddonfield 1978"</h3>
+              <p>Chamarra bomber de gabardina con parche de la calabaza de Judith Myers y réplica del cuchillo en llavero cromado.</p>
+              <span class="mini-tag" style="margin-top: 14px; display: inline-block;">Ropa & Llaveros</span>
+            </article>
+
+            <article>
+              <span class="benefit-kicker">EN 2 SEMANAS</span>
+              <h3>Peluche "The Dredge - Shadow Mist"</h3>
+              <p>Peluche de 30cm del Dragado con brazos de niebla negra suave y calaveras que asoman desde su interior.</p>
+              <span class="mini-tag" style="margin-top: 14px; display: inline-block;">Peluches & Figuras</span>
+            </article>
+
+            <article>
+              <span class="benefit-kicker">FIN DE MES</span>
+              <h3>Lámpara Neón "Hex: Devour Hope"</h3>
+              <p>Lámpara acrílica Neón LED con regulador táctil del tótem de Devorador de Esperanza con 5 marcas de sacrificio.</p>
+              <span class="mini-tag" style="margin-top: 14px; display: inline-block;">Decoración & Setup</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- BLOODPOINTS EXPLAINER SECTION -->
+      <section class="business-section" style="background: #0d0f0c;">
+        <div class="container">
+          <header class="section-header">
+            <span class="section-tag">04 / ECONOMÍA DE LA NIEBLA</span>
+            <h2 class="section-title">¿Cómo Funcionan los Bloodpoints (BP)?</h2>
+            <p class="section-desc">En cada compra acumulas puntos sangrientos que puedes canjear por cupones de descuento o usar para pagar parte de tu orden.</p>
+          </header>
+
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <span class="benefit-kicker">GANANCIA DIRECTA</span>
+              <h3>100 BP por cada $1 MXN gastado</h3>
+              <p>No importa si compras un llavero de $189 o una réplica de $1,899: cada peso se convierte en Bloodpoints acumulables en tu perfil sin fecha de caducidad.</p>
+            </div>
+
+            <div class="benefit-card">
+              <span class="benefit-kicker">CANJE EN CHECKOUT</span>
+              <h3>Paga directamente con Puntos</h3>
+              <p>En el carrito de compras puedes aplicar tus puntos para reducir el importe en pesos mexicanos o ganar artículos gratis al acumular cofres de ofrenda.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="brand-logo">
+              <div class="brand-icon-wrap">
+                <span>🩸</span>
+              </div>
+              <div>
+                <span class="brand-title">LA NIEBLA STORE</span>
+                <span class="brand-subtitle">Colecciona · Viste · Sobrevive</span>
+              </div>
+            </div>
+            <p>
+              Tienda oficial de merchandising temático inspirado en Dead by Daylight. Ropa, snacks, llaveros, peluches, figuras y réplicas de coleccionista.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Páginas</h4>
+            <ul>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="catalogo.html">Catálogo Completo</a></li>
+              <li><a href="drops.html">Drops Semanales</a></li>
+              <li><a href="envios.html">Envíos & Rastreo</a></li>
+              <li><a href="nosotros.html">Manifiesto & Almacén</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Categorías</h4>
+            <ul>
+              <li><a href="catalogo.html?cat=snacks">Snacks & Dulces</a></li>
+              <li><a href="catalogo.html?cat=ropa">Ropa & Streetwear</a></li>
+              <li><a href="catalogo.html?cat=llaveros">Llaveros & Pins</a></li>
+              <li><a href="catalogo.html?cat=peluches">Peluches & Figuras</a></li>
+              <li><a href="catalogo.html?cat=coleccion">Colección & Réplicas</a></li>
+              <li><a href="catalogo.html?cat=posters">Posters & Decoración</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Servicio al Cliente</h4>
+            <ul>
+              <li>Envíos a todo México & LATAM</li>
+              <li>Despachos de Lun a Vie</li>
+              <li>Garantía de satisfacción 30 días</li>
+              <li>Soporte: contacto@lanieblastore.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© 2026 La Niebla Store - Merchandising inspirado en el universo Dead by Daylight creado por Behaviour Interactive. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Cart Drawer, Skill Check & Modals -->
+  <div class="cart-drawer-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Carrito de compras">
+    <div class="cart-drawer-header">
+      <h3 class="cart-drawer-title">
+        <span>🛒</span> Tu Carrito de Botín (<span id="cartItemsCount">0 artículos</span>)
+      </h3>
+      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Cerrar carrito">&times;</button>
+    </div>
+    <div class="cart-items-container" id="cartItemsList"></div>
+    <div class="cart-empty-state" id="cartEmptyState">
+      <span class="cart-empty-icon">🎒</span>
+      <h4>Tu carrito está vacío</h4>
+      <p>Explora el catálogo y añade snacks, ropa o coleccionables a tu orden.</p>
+      <a href="catalogo.html" class="btn-dbd btn-ghost" onclick="window.dbdApp.cart.closeDrawer()">
+        <span>🔍</span> Ver Catálogo
+      </a>
+    </div>
+    <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
+      <div class="coupon-section">
+        <input type="text" id="cartCouponInput" class="coupon-input" placeholder="Código de descuento (ej. HEX:RUIN20)" autocomplete="off">
+        <button class="btn-coupon" id="cartApplyCouponBtn">Aplicar</button>
+      </div>
+      <div class="cart-summary-rows">
+        <div class="summary-row">
+          <span>Equivalente en Bloodpoints:</span>
+          <span id="cartSubtotalBP">0 BP</span>
+        </div>
+        <div class="summary-row" id="cartDiscountRow" style="display: none; color: #ff9100;">
+          <span>Descuento de la Niebla:</span>
+          <span id="cartDiscountAmount">-0%</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total a Pagar:</span>
+          <span id="cartTotalMoney">$0.00 MXN</span>
+        </div>
+      </div>
+      <button class="btn-dbd btn-killer btn-checkout" id="cartCheckoutBtn">
+        <span>🔥</span>
+        <span class="btn-text">Proceder al Pago / Ordenar</span>
+      </button>
+    </div>
+  </aside>
+
+  <div id="skillCheckContainer"></div>
+
+  <div class="modal-backdrop" id="orderConfirmationModal">
+    <div class="modal-card" style="max-width: 520px; text-align: center; padding: 30px;">
+      <button class="modal-close" id="orderConfirmationClose">&times;</button>
+      <span style="font-size: 3.5rem; display: block; margin-bottom: 12px;">🩸</span>
+      <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: #fff; margin-bottom: 6px;">¡Orden Recibida en la Niebla!</h3>
+      <p style="color: #8e9aaf; font-size: 0.9rem; margin-bottom: 20px;">Tu pedido ha sido registrado en nuestro almacén. El equipo está preparando tu paquete con sello conmemorativo del Ente.</p>
+      <div class="res-ticket">
+        <div class="res-ticket-header">
+          <span>CÓDIGO DE RASTREO: <strong id="receiptOrderCode">DBD-MERCH-000000</strong></span>
+        </div>
+        <div id="receiptItemsList" style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #c9d1d9;"></div>
+        <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: #ff4d6d;">
+          <span>Bloodpoints Acumulados:</span>
+          <span id="receiptTotalBP">0 BP</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1.1rem; color: #fff; margin-top: 4px;">
+          <span>Total de la Orden:</span>
+          <span id="receiptTotalMoney">$0.00 MXN</span>
+        </div>
+      </div>
+      <button class="btn-dbd btn-survivor" style="width: 100%;" onclick="document.getElementById('orderConfirmationModal').classList.remove('active')">
+        <span>✅</span> ¡Excelente, a esperar el botín!
+      </button>
+    </div>
+  </div>
+
+  <!-- Main JavaScript App (ES Modules) -->
+  <script type="module" src="scripts/app.js"></script>
+
+</body>
+</html>

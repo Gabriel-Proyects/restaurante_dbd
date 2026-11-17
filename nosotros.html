@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nosotros & Manifiesto | La Niebla Store - Dead by Daylight</title>
+  <meta name="description" content="Conoce la historia detrás de La Niebla Store, el taller de diseño de merchandising oficial de Dead by Daylight y los sectores de almacén del Reino.">
+  <meta name="keywords" content="Nosotros DBD, Historia Dead by Daylight Store, Taller de Merch DBD, Almacén del Ente">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
+</head>
+<body>
+
+  <!-- Ambient Fog & Campfire Embers Simulation Canvas -->
+  <canvas id="fogCanvas"></canvas>
+
+  <div class="app-wrapper">
+
+    <!-- SITE HEADER -->
+    <header class="site-header">
+      <div class="container nav-content">
+        <a href="index.html" class="brand-logo" id="brandLogo">
+          <div class="brand-icon-wrap">
+            <span>🩸</span>
+          </div>
+          <div class="brand-text-block">
+            <span class="brand-title">LA NIEBLA STORE</span>
+            <span class="brand-subtitle">Colecciona · Viste · Sobrevive</span>
+          </div>
+        </a>
+
+        <nav>
+          <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="drops.html">Drops & Lealtad</a></li>
+            <li><a href="envios.html">Envíos & Rastreo</a></li>
+            <li><a href="nosotros.html" class="active">Nosotros</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-actions">
+          <!-- Audio Ambience Toggle -->
+          <button class="btn-audio-toggle" id="audioToggleBtn" title="Activar/Desactivar sonido ambiental de la fogata">
+            <span class="audio-icon">🔇</span>
+            <span class="audio-text">Sonido</span>
+          </button>
+
+          <!-- Skill Check Minigame Trigger -->
+          <button class="btn-skillcheck-header open-skillcheck-trigger" title="Jugar prueba de habilidad para ganar hasta un 20% de descuento">
+            <span>⚙️</span>
+            <span class="btn-text">Skill Check (20% OFF)</span>
+          </button>
+
+          <!-- Cart Toggle -->
+          <button class="btn-cart-toggle" id="cartToggleBtn" aria-label="Ver Carrito de Compras">
+            <span>🛒</span>
+            <span class="cart-label">Carrito</span>
+            <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+          </button>
+
+          <!-- Mobile Toggle -->
+          <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Abrir menú de navegación">
+            ☰
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <div class="mobile-nav-drawer" id="mobileNavDrawer">
+        <div class="mobile-drawer-header">
+          <div class="brand-logo">
+            <div class="brand-icon-wrap" style="width:34px; height:34px; font-size:16px;">
+              <span>🩸</span>
+            </div>
+            <span class="brand-title" style="font-size:1rem;">LA NIEBLA STORE</span>
+          </div>
+          <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Cerrar menú">&times;</button>
+        </div>
+        <ul class="mobile-nav-links-list">
+          <li><a href="index.html" class="mobile-nav-link"><span>🏠</span> Inicio</a></li>
+          <li><a href="catalogo.html" class="mobile-nav-link"><span>🛍️</span> Catálogo Completo</a></li>
+          <li><a href="drops.html" class="mobile-nav-link"><span>🎁</span> Drops & Lealtad</a></li>
+          <li><a href="envios.html" class="mobile-nav-link"><span>📦</span> Envíos & Rastreo</a></li>
+          <li><a href="nosotros.html" class="mobile-nav-link active"><span>🕯️</span> Manifiesto y Almacén</a></li>
+          <li><a href="#" class="mobile-nav-link open-skillcheck-trigger"><span>⚙️</span> Probar Skill Check (20% OFF)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <main>
+      <!-- SUBPAGE HERO -->
+      <section class="page-hero-section">
+        <div class="container">
+          <div class="page-breadcrumbs">
+            <a href="index.html">Inicio</a>
+            <span class="sep">/</span>
+            <span>Nosotros & Manifiesto</span>
+          </div>
+          <h1 class="section-title" style="font-size: clamp(2.2rem, 4vw, 3.4rem); margin-bottom: 8px;">
+            El Pacto de la Fogata
+          </h1>
+          <p class="section-desc" style="max-width: 720px;">
+            De supervivientes para supervivientes. Conoce la historia de cómo diseñamos cada pieza, los sectores temáticos de nuestro almacén y nuestro estándar inquebrantable de calidad.
+          </p>
+        </div>
+      </section>
+
+      <!-- STORY & MISSION -->
+      <section class="business-section" style="padding-top: 40px;">
+        <div class="container" style="max-width: 960px;">
+          <div class="section-header">
+            <span class="section-tag">01 / NUESTRO ORIGEN</span>
+            <h2 class="section-title">El Arte de Forjar Reliquias</h2>
+            <p class="section-desc">
+              La Niebla Store nació como un proyecto impulsado por jugadores apasionados que querían tener en sus manos réplicas y ropa con la misma autenticidad, peso y atmósfera que se respira en cada partida de Dead by Daylight.
+            </p>
+          </div>
+
+          <p style="color: #c9d1d9; font-size: 1.05rem; line-height: 1.8; margin-bottom: 24px;">
+            No creemos en el merchandising genérico ni en playeras delgadas que se deslavan a la tercera lavada. Por eso investigamos y colaboramos con talleres especializados en fundición de zinc, tallado de maderas duras y teñido ácido para que cada hoodie, réplica o llavero parezca rescatado directamente de los dominios del Ente.
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin: 36px 0;">
+            <div style="background: rgba(18,22,32,0.8); border: 1px solid rgba(255,32,78,0.3); border-radius: var(--radius-md); padding: 24px;">
+              <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">💎</span>
+              <h4 style="color: #fff; font-size: 1.15rem; margin-bottom: 6px;">Materiales Pesados</h4>
+              <p style="color: #8e9aaf; font-size: 0.85rem; line-height: 1.6;">
+                Algodón peinado French Terry de 420 GSM, broches de latón envejecido y aleaciones de zinc de más de 80 gramos.
+              </p>
+            </div>
+
+            <div style="background: rgba(18,22,32,0.8); border: 1px solid rgba(255,145,0,0.3); border-radius: var(--radius-md); padding: 24px;">
+              <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">🎨</span>
+              <h4 style="color: #fff; font-size: 1.15rem; margin-bottom: 6px;">Fidelidad al Lore</h4>
+              <p style="color: #8e9aaf; font-size: 0.85rem; line-height: 1.6;">
+                Cada grabado, color y cicatriz está validado contra los modelos tridimensionales del juego oficial.
+              </p>
+            </div>
+
+            <div style="background: rgba(18,22,32,0.8); border: 1px solid rgba(82,183,136,0.3); border-radius: var(--radius-md); padding: 24px;">
+              <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">🎁</span>
+              <h4 style="color: #fff; font-size: 1.15rem; margin-bottom: 6px;">Experiencia Collector</h4>
+              <p style="color: #8e9aaf; font-size: 0.85rem; line-height: 1.6;">
+                Cajas rígidas numeradas, sellos de lacre rojo carmesí y tarjetas de autenticidad coleccionables.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STORE ZONES / REALMS TOUR -->
+      <section class="reservation-section" id="almacen" style="background: #11140f;">
+        <div class="container">
+          <header class="section-header">
+            <span class="section-tag">02 / TOUR DE ALMACÉN</span>
+            <h2 class="section-title">Los 6 Sectores del Reino</h2>
+            <p class="section-desc">
+              Nuestro centro de resguardo está dividido temáticamente para clasificar y empacar cada tipo de botín con el cuidado que amerita. Haz clic en cada sector para conocerlo.
+            </p>
+          </header>
+
+          <div class="realms-grid" id="realmsCardsList" style="margin-top: 24px;">
+            <!-- Generated dynamically via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- COMMUNITY REVIEWS & STREAMERS -->
+      <section class="business-section">
+        <div class="container">
+          <header class="section-header">
+            <span class="section-tag">03 / LA VOZ DEL ESCUADRÓN</span>
+            <h2 class="section-title">Lo que dicen los Supervivientes</h2>
+          </header>
+
+          <div class="daypart-grid">
+            <article>
+              <div style="color: #ff9100; margin-bottom: 10px;">★★★★★</div>
+              <h3>"La calidad de la hoodie Fog Whisperer es una locura"</h3>
+              <p>"El algodón pesa muchísimo, tiene una caída brutal y el bolsillo oculto para llaves es un detalle top. Sin duda el mejor merch que tengo de DBD."</p>
+              <span class="benefit-kicker" style="margin-top: 14px; display: block; color: var(--fire-amber);">— Carlos M., Superviviente Prestigio 100</span>
+            </article>
+
+            <article>
+              <div style="color: #ff9100; margin-bottom: 10px;">★★★★★</div>
+              <h3>"La Caja de Lamento pesa como metal real"</h3>
+              <p>"Es una réplica pesadísima de latón que parece de museo. La base expositora con las garras se ve increíble junto a mi monitor."</p>
+              <span class="benefit-kicker" style="margin-top: 14px; display: block; color: var(--fire-amber);">— Valeria R., Main Cenobita</span>
+            </article>
+
+            <article>
+              <div style="color: #ff9100; margin-bottom: 10px;">★★★★★</div>
+              <h3>"El peluche interactivo del generador es genial"</h3>
+              <p>"Al presionar el botón los pistones vibran y se encienden las luces amarillas. Llegó súper protegido en caja temática sellada."</p>
+              <span class="benefit-kicker" style="margin-top: 14px; display: block; color: var(--fire-amber);">— Dani Gamer, Streamer de Twitch</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA TO EXPLORE CATALOG -->
+      <section class="business-section" style="background: radial-gradient(ellipse at center, rgba(196, 61, 52, 0.15), transparent 70%); text-align: center; padding: 60px 0;">
+        <div class="container" style="max-width: 680px;">
+          <h2 style="font-size: 2.2rem; color: #fff; margin-bottom: 12px; font-weight: 700;">¿Listo para equipar a tu escuadrón?</h2>
+          <p style="color: #8e9aaf; font-size: 0.95rem; margin-bottom: 24px;">
+            Aprovecha los descuentos del Skill Check y descubre prendas exclusivas antes de que se agoten los tirajes semanales.
+          </p>
+          <a href="catalogo.html" class="btn-dbd btn-killer" style="font-size: 1rem; padding: 14px 32px;">
+            <span>🛍️</span> Explorar Todo el Catálogo
+          </a>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="brand-logo">
+              <div class="brand-icon-wrap">
+                <span>🩸</span>
+              </div>
+              <div>
+                <span class="brand-title">LA NIEBLA STORE</span>
+                <span class="brand-subtitle">Colecciona · Viste · Sobrevive</span>
+              </div>
+            </div>
+            <p>
+              Tienda oficial de merchandising temático inspirado en Dead by Daylight. Ropa, snacks, llaveros, peluches, figuras y réplicas de coleccionista.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Páginas</h4>
+            <ul>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="catalogo.html">Catálogo Completo</a></li>
+              <li><a href="drops.html">Drops Semanales</a></li>
+              <li><a href="envios.html">Envíos & Rastreo</a></li>
+              <li><a href="nosotros.html">Manifiesto & Almacén</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Categorías</h4>
+            <ul>
+              <li><a href="catalogo.html?cat=snacks">Snacks & Dulces</a></li>
+              <li><a href="catalogo.html?cat=ropa">Ropa & Streetwear</a></li>
+              <li><a href="catalogo.html?cat=llaveros">Llaveros & Pins</a></li>
+              <li><a href="catalogo.html?cat=peluches">Peluches & Figuras</a></li>
+              <li><a href="catalogo.html?cat=coleccion">Colección & Réplicas</a></li>
+              <li><a href="catalogo.html?cat=posters">Posters & Decoración</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Servicio al Cliente</h4>
+            <ul>
+              <li>Envíos a todo México & LATAM</li>
+              <li>Despachos de Lun a Vie</li>
+              <li>Garantía de satisfacción 30 días</li>
+              <li>Soporte: contacto@lanieblastore.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© 2026 La Niebla Store - Merchandising inspirado en el universo Dead by Daylight creado por Behaviour Interactive. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Cart Drawer, Skill Check & Modals -->
+  <div class="cart-drawer-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Carrito de compras">
+    <div class="cart-drawer-header">
+      <h3 class="cart-drawer-title">
+        <span>🛒</span> Tu Carrito de Botín (<span id="cartItemsCount">0 artículos</span>)
+      </h3>
+      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Cerrar carrito">&times;</button>
+    </div>
+    <div class="cart-items-container" id="cartItemsList"></div>
+    <div class="cart-empty-state" id="cartEmptyState">
+      <span class="cart-empty-icon">🎒</span>
+      <h4>Tu carrito está vacío</h4>
+      <p>Explora el catálogo y añade snacks, ropa o coleccionables a tu orden.</p>
+      <a href="catalogo.html" class="btn-dbd btn-ghost" onclick="window.dbdApp.cart.closeDrawer()">
+        <span>🔍</span> Ver Catálogo
+      </a>
+    </div>
+    <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
+      <div class="coupon-section">
+        <input type="text" id="cartCouponInput" class="coupon-input" placeholder="Código de descuento (ej. HEX:RUIN20)" autocomplete="off">
+        <button class="btn-coupon" id="cartApplyCouponBtn">Aplicar</button>
+      </div>
+      <div class="cart-summary-rows">
+        <div class="summary-row">
+          <span>Equivalente en Bloodpoints:</span>
+          <span id="cartSubtotalBP">0 BP</span>
+        </div>
+        <div class="summary-row" id="cartDiscountRow" style="display: none; color: #ff9100;">
+          <span>Descuento de la Niebla:</span>
+          <span id="cartDiscountAmount">-0%</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total a Pagar:</span>
+          <span id="cartTotalMoney">$0.00 MXN</span>
+        </div>
+      </div>
+      <button class="btn-dbd btn-killer btn-checkout" id="cartCheckoutBtn">
+        <span>🔥</span>
+        <span class="btn-text">Proceder al Pago / Ordenar</span>
+      </button>
+    </div>
+  </aside>
+
+  <div id="skillCheckContainer"></div>
+
+  <div class="modal-backdrop" id="orderConfirmationModal">
+    <div class="modal-card" style="max-width: 520px; text-align: center; padding: 30px;">
+      <button class="modal-close" id="orderConfirmationClose">&times;</button>
+      <span style="font-size: 3.5rem; display: block; margin-bottom: 12px;">🩸</span>
+      <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: #fff; margin-bottom: 6px;">¡Orden Recibida en la Niebla!</h3>
+      <p style="color: #8e9aaf; font-size: 0.9rem; margin-bottom: 20px;">Tu pedido ha sido registrado en nuestro almacén. El equipo está preparando tu paquete con sello conmemorativo del Ente.</p>
+      <div class="res-ticket">
+        <div class="res-ticket-header">
+          <span>CÓDIGO DE RASTREO: <strong id="receiptOrderCode">DBD-MERCH-000000</strong></span>
+        </div>
+        <div id="receiptItemsList" style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #c9d1d9;"></div>
+        <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: #ff4d6d;">
+          <span>Bloodpoints Acumulados:</span>
+          <span id="receiptTotalBP">0 BP</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1.1rem; color: #fff; margin-top: 4px;">
+          <span>Total de la Orden:</span>
+          <span id="receiptTotalMoney">$0.00 MXN</span>
+        </div>
+      </div>
+      <button class="btn-dbd btn-survivor" style="width: 100%;" onclick="document.getElementById('orderConfirmationModal').classList.remove('active')">
+        <span>✅</span> ¡Excelente, a esperar el botín!
+      </button>
+    </div>
+  </div>
+
+  <!-- Main JavaScript App (ES Modules) -->
+  <script type="module" src="scripts/app.js"></script>
+
+</body>
+</html>
