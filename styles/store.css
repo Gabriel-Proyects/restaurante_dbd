@@ -1,0 +1,286 @@
+/* ==========================================================================
+   La Niebla Store - Capa de tienda: ilustraciones de producto, checkout y
+   validaciones. Se carga al final para ajustar los estilos anteriores.
+   ========================================================================== */
+
+:root {
+  --rc: #7fae5b;            /* color de rareza (se sobreescribe por elemento) */
+  --ok: #7fae5b;
+  --err: #e0705f;
+  --ink: #eeeae1;
+  --ink-soft: #a4ac9d;
+  --line: #ffffff16;
+  --panel: #151814;
+  --panel-deep: #10130f;
+}
+
+body.no-scroll { overflow: hidden; }
+
+/* --- Ilustraciones SVG --- */
+.art-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.art-svg .a { fill: currentColor; fill-opacity: .22; }
+
+/* Tarjeta de producto: panel ilustrado en lugar del rombo con emoji */
+.menu-card .card-visual.product-art {
+  position: relative;
+  margin: 14px 18px 0;
+  padding: 22px 16px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--rc);
+  background:
+    radial-gradient(ellipse at 50% 42%, color-mix(in srgb, var(--rc) 22%, transparent), transparent 62%),
+    repeating-linear-gradient(135deg, #ffffff05 0 1px, transparent 1px 9px),
+    linear-gradient(180deg, #1b1f19, #121510);
+  overflow: hidden;
+}
+.menu-card .card-visual.product-art::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--rc), transparent);
+  opacity: .7;
+}
+.art-icon {
+  width: 88px;
+  height: 88px;
+  filter: drop-shadow(0 6px 14px #0008);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.menu-card:hover .art-icon { transform: translateY(-3px) rotate(-3deg) scale(1.05); }
+.art-code {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-family: var(--font-mono);
+  font-size: .55rem;
+  letter-spacing: 1.5px;
+  color: #8f9488;
+}
+.menu-card .card-visual.product-art .card-char-name { margin-top: 12px; }
+
+/* Pastilla para rareza "poco común" que no tenía estilo */
+.rarity-uncommon {
+  background: rgba(201, 164, 64, .15);
+  color: #e3c264;
+  border: 1px solid rgba(201, 164, 64, .4);
+}
+
+/* Íconos de las categorías */
+.filter-tab .tab-icon { display: inline-flex; width: 18px; height: 18px; filter: none; color: #c5ad82; }
+.filter-tab.active .tab-icon { color: #f3e4cc; }
+.filter-tab .tab-icon .art-svg { stroke-width: 3.2; }
+
+/* Modal de producto */
+.modal-hero-visual {
+  color: var(--rc);
+  background:
+    radial-gradient(ellipse at 50% 40%, color-mix(in srgb, var(--rc) 25%, transparent), transparent 60%),
+    repeating-linear-gradient(135deg, #ffffff05 0 1px, transparent 1px 9px),
+    #121510;
+}
+.modal-dish-emoji { width: 120px; height: 120px; margin: 0 auto 14px; font-size: 0; }
+
+/* Carrito */
+.cart-item-icon { color: var(--rc); padding: 6px; background: #0e110d; border: 1px solid var(--line); }
+.cart-item-icon .art-svg { stroke-width: 3; }
+.cart-item-note { font-size: .74rem; color: #c5ad82; margin-top: 2px; }
+.qty-btn:disabled { opacity: .35; cursor: not-allowed; }
+.discount-remove {
+  margin-left: 6px;
+  background: none;
+  border: 0;
+  color: #c5ad82;
+  font-size: .72rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.coupon-input.input-error { border-color: var(--err); }
+
+/* Toasts */
+.toast-msg { background: #171b15; border-color: #a44539; font-weight: 500; }
+.toast-msg.toast-error { border-color: var(--err); }
+.toast-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: .72rem;
+  font-weight: 800;
+  background: #7fae5b33;
+  color: #b9dc9a;
+  flex-shrink: 0;
+}
+.toast-error .toast-icon { background: #e0705f33; color: #f2a598; }
+
+/* --- Estados de validación genéricos --- */
+.input-error,
+.form-control[aria-invalid='true'],
+.tracking-input[aria-invalid='true'] {
+  border-color: var(--err) !important;
+  box-shadow: 0 0 0 3px #e0705f22 !important;
+}
+
+/* Selector de talla */
+.size-picker { display: flex; flex-direction: column; gap: 8px; }
+.size-label { font-size: .82rem; font-weight: 600; color: #c9d1d9; }
+.size-label em { font-style: normal; font-weight: 400; color: #8f9488; }
+.size-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.size-chip {
+  min-width: 52px;
+  padding: 9px 12px;
+  border: 1px solid #ffffff24;
+  border-radius: 3px;
+  background: #0e120d;
+  color: var(--ink);
+  font: 600 .8rem var(--font-body);
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.size-chip:hover { border-color: #c5ad82; }
+.size-chip.active { background: #85312a; border-color: #c14a3e; }
+.size-error { display: none; font-size: .75rem; color: var(--err); }
+.size-picker.has-error .size-error { display: block; }
+.size-picker.has-error .size-chip { border-color: #e0705f88; }
+
+.note-counter { align-self: flex-end; font-size: .7rem; color: #8f9488; font-family: var(--font-mono); }
+
+/* --- Checkout --- */
+.checkout-card { max-width: 980px; padding: 0; background: #131611; border-color: #ffffff1c; }
+.checkout-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr); }
+.checkout-form { padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 22px; }
+.checkout-head h3 { font-size: 1.6rem; font-weight: 500; color: var(--ink); margin: 4px 0 10px; letter-spacing: -.5px; }
+.checkout-kicker { font-size: .62rem; letter-spacing: 2.5px; text-transform: uppercase; color: #b86858; }
+.checkout-demo-note {
+  font-size: .78rem;
+  color: #b1b8a6;
+  padding: 10px 12px;
+  border-left: 2px solid #a48b61;
+  background: #c3a8710a;
+}
+.checkout-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.checkout-fieldset legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .95rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.checkout-fieldset legend span { font-family: var(--font-mono); font-size: .7rem; color: #b17461; }
+.co-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+.co-grid[hidden] { display: none; }
+.co-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.co-field.full { grid-column: 1 / -1; }
+.co-field label { font-size: .78rem; font-weight: 600; color: #c9cdc2; }
+.co-field .form-control { padding: 11px 12px; }
+.co-field.is-valid .form-control { border-color: #7fae5b66; }
+.co-field.has-error label { color: #f2a598; }
+.co-error { min-height: 0; font-size: .74rem; color: var(--err); }
+.co-error:empty { display: none; }
+
+.co-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.co-option {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid #ffffff1c;
+  border-radius: 4px;
+  background: #0e120d;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.co-option:hover { border-color: #c5ad8288; }
+.co-option:has(input:checked) { border-color: #c14a3e; background: #2a1714; }
+.co-option input { accent-color: #c14a3e; margin-top: 3px; }
+.co-option-body { display: flex; flex-direction: column; gap: 2px; }
+.co-option-body strong { font-size: .84rem; font-weight: 600; color: var(--ink); }
+.co-option-body small { font-size: .74rem; color: #a4ac9d; }
+.co-card-fields { margin-top: 14px; }
+.co-hint { font-size: .74rem; color: #8e9887; margin-top: 10px; }
+
+.co-check { display: flex; gap: 10px; align-items: flex-start; font-size: .82rem; color: #c9cdc2; cursor: pointer; }
+.co-check input { accent-color: #c14a3e; width: 16px; height: 16px; margin-top: 2px; flex-shrink: 0; }
+.co-terms.has-error .co-check { color: #f2a598; }
+
+.co-form-alert {
+  padding: 10px 12px;
+  border: 1px solid #e0705f66;
+  background: #e0705f14;
+  color: #f2c1b8;
+  font-size: .82rem;
+  border-radius: 3px;
+}
+.co-submit { width: 100%; justify-content: center; padding: 15px 20px; font-size: .9rem; }
+
+.checkout-summary {
+  padding: 30px 26px;
+  background: #0f120e;
+  border-left: 1px solid #ffffff12;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.checkout-summary h4 { font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; color: #c5ad82; font-weight: 600; }
+.co-summary-items { display: flex; flex-direction: column; gap: 12px; max-height: 320px; overflow-y: auto; padding-right: 4px; }
+.co-summary-item { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: center; }
+.co-thumb {
+  width: 42px;
+  height: 42px;
+  padding: 6px;
+  color: var(--rc);
+  border: 1px solid #ffffff14;
+  background: #151814;
+  border-radius: 3px;
+}
+.co-thumb .art-svg { stroke-width: 3; }
+.co-item-text { display: flex; flex-direction: column; min-width: 0; }
+.co-item-text strong { font-size: .8rem; font-weight: 500; color: var(--ink); line-height: 1.3; }
+.co-item-text small { font-size: .72rem; color: #8f9488; overflow-wrap: anywhere; }
+.co-summary-rows { border-top: 1px solid #ffffff14; padding-top: 14px; display: flex; flex-direction: column; gap: 8px; font-size: .84rem; color: #b0b6a6; }
+.co-summary-rows > div { display: flex; justify-content: space-between; gap: 10px; }
+.co-summary-rows > div[hidden], .co-form-alert[hidden] { display: none; }
+.co-summary-rows .co-discount { color: #d9b56f; }
+.co-summary-rows .co-total { margin-top: 6px; padding-top: 10px; border-top: 1px dashed #ffffff1c; font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+
+/* Recibo */
+#orderConfirmationModal .modal-card { background: #151913; border-color: #ffffff1c; }
+#orderConfirmationModal .res-ticket { background: #0e110d; border: 1px dashed #c5ad8244; text-align: left; }
+.receipt-row { display: flex; justify-content: space-between; gap: 10px; text-align: left; }
+.receipt-customer { color: #c5ad82; font-size: .8rem; padding-bottom: 6px; border-bottom: 1px dashed #ffffff14; }
+.receipt-discount { color: #d9b56f; }
+
+/* Rastreo de un pedido real */
+.tracking-order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-left: 2px solid #7fae5b;
+  background: #7fae5b0d;
+  font-size: .82rem;
+  color: #b1b8a6;
+}
+.tracking-order-info strong { color: var(--ink); font-weight: 600; }
+
+/* Aviso de fan store en el pie */
+.footer-bottom p { max-width: 820px; line-height: 1.6; }
+
+@media (max-width: 820px) {
+  .checkout-layout { grid-template-columns: 1fr; }
+  .checkout-summary { order: -1; border-left: 0; border-bottom: 1px solid #ffffff12; padding: 22px 20px; }
+  .co-summary-items { max-height: 180px; }
+  .checkout-form { padding: 22px 20px; }
+}
+@media (max-width: 520px) {
+  .co-grid { grid-template-columns: 1fr; }
+  .checkout-backdrop { align-items: flex-end; }
+  .checkout-card { max-height: 94vh; border-radius: 8px 8px 0 0; }
+  .art-icon { width: 76px; height: 76px; }
+}

@@ -1,5 +1,5 @@
 /**
- * La Niebla Store - Catálogo Oficial de Merchandising Dead by Daylight
+ * La Niebla Store - Catálogo Fan-Made (no oficial) inspirado en Dead by Daylight
  * Dead by Daylight Themed Merch & Marketing Store Catalog Data (50+ Items)
  */
 
@@ -234,7 +234,7 @@ export const MENU_ITEMS = [
     category: 'ropa',
     featured: true,
     name: 'Playera Acid Wash "Never Stop Slashing - Legion"',
-    subtitle: 'Frank, Julie, Susie & Joey Official Merch',
+    subtitle: 'Frank, Julie, Susie & Joey Fan Art Tee',
     character: 'La Legión (The Legion)',
     rarity: 'ultra-rare',
     rarityLabel: 'Ultra Raro',
@@ -586,7 +586,7 @@ export const MENU_ITEMS = [
     id: 'pel1',
     category: 'peluches',
     featured: true,
-    name: 'Peluche Chibi Oficial "Anna The Huntress 28cm"',
+    name: 'Peluche Chibi Fan-Made "Anna The Huntress 28cm"',
     subtitle: 'Con Hacha de Felpa Removible & Máscara de Liebre',
     character: 'La Cazadora (The Huntress)',
     rarity: 'iridescent',
@@ -622,7 +622,7 @@ export const MENU_ITEMS = [
     description: 'Peluche cúbico de 22cm con forma del generador. Al oprimir el botón superior, los pistones vibran suavemente, las 4 luces LED superiores parpadean y se encienden en secuencia reproduciendo el sonido clásico de generador reparado.',
     lore: '"¡Gen pop! Por fin una reparación que no te costará ningún gancho."',
     perks: [
-      { name: 'Módulo de Audio Original DBD', desc: 'Efecto de sonido con licencia de arranque y bombillas encendidas.' },
+      { name: 'Módulo de Audio Temático', desc: 'Efecto de sonido de arranque y bombillas encendidas.' },
       { name: 'LEDs Amarillos Cálidos', desc: 'Funciona como lámpara quitamiedos nocturna durante 15 minutos.' }
     ],
     ingredients: ['Dimensiones: 22 x 20 x 20 cm', 'Funciona con 3 pilas AAA (incluidas)', 'Compartimento con velcro de seguridad', 'Tejido Minky anti-pilling'],
@@ -641,7 +641,7 @@ export const MENU_ITEMS = [
     priceBP: 65000,
     priceMoney: 599.00,
     imageFallback: '👻',
-    badge: 'Licencia Oficial',
+    badge: 'Fan Favorite',
     description: 'Peluche de 25cm de Ghostface con su icónica máscara blanca, túnica negra con tiras flotantes, mini cámara fotográfica vintage bordada al cuello y mirada pícara en formato Chibi adorable.',
     lore: '"Te está observando desde la esquina del librero... esperando el ángulo perfecto."',
     perks: [
@@ -714,7 +714,7 @@ export const MENU_ITEMS = [
     description: 'Peluche de cuervo negro con plumaje sintético ultra suave y ojos rojos bordados. Al apretarle suavemente el pecho, emite el graznido estridente que alerta a los asesinos de tu posición en el mapa.',
     lore: '"No pases corriendo cerca de ellos si no llevas calma espiritual."',
     perks: [
-      { name: 'Chip de Sonido Integrado', desc: 'Reproduce el graznido auténtico del cuervo de Dead by Daylight.' },
+      { name: 'Chip de Sonido Integrado', desc: 'Reproduce un graznido grave inspirado en los cuervos de la Niebla.' },
       { name: 'Patitas Posables con Alambre', desc: 'Puedes posarlo posado sobre tu monitor, estante o repisa.' }
     ],
     ingredients: ['Felpa negra aterciopelada', 'Estructura interior maleable en patas', 'Altura: 22cm', 'Batería interna de larga duración'],
@@ -738,7 +738,7 @@ export const MENU_ITEMS = [
     lore: '"Que comience el juego. Tienes tiempo límite para quitarte la trampa."',
     perks: [
       { name: 'Capucha con Doble Posición', desc: 'Puedes exhibirla con la máscara puesta o descubierta.' },
-      { name: 'Detalles SAW con Licencia', desc: 'Espiral roja bordada en la solapa de su abrigo.' }
+      { name: 'Detalles Bordados', desc: 'Espiral roja bordada en la solapa de su abrigo.' }
     ],
     ingredients: ['Poliéster suave, cuerina sintética roja', 'Relleno de fibra hueca siliconada', 'Altura: 26cm', 'Cuchilla retráctil de felpa oculta en la manga'],
     spiciness: 0,
@@ -748,8 +748,8 @@ export const MENU_ITEMS = [
     id: 'pel8',
     category: 'peluches',
     featured: false,
-    name: 'Figura Nendoroid Coleccionable "Feng Min Bunny Hoodie"',
-    subtitle: 'Good Smile Company x DBD - Múltiples Accesorios',
+    name: 'Figura Chibi Articulada "Feng Min Bunny Hoodie"',
+    subtitle: 'Figura Articulada Fan-Made - Múltiples Accesorios',
     character: 'Feng Min',
     rarity: 'iridescent',
     rarityLabel: 'Iridiscente',
@@ -757,7 +757,7 @@ export const MENU_ITEMS = [
     priceMoney: 1399.00,
     imageFallback: '🐰',
     badge: 'Importación Japonesa',
-    description: 'Figura de colección oficial de 10cm articulada con acabados de lujo. Incluye su icónica sudadera verde de orejas de conejo, 3 placas faciales intercambiables (sonriente, concentrada en generador y en pánico), linterna morada y caja de herramientas.',
+    description: 'Figura de colección fan-made de 10cm articulada con acabados de lujo. Incluye su icónica sudadera verde de orejas de conejo, 3 placas faciales intercambiables (sonriente, concentrada en generador y en pánico), linterna morada y caja de herramientas.',
     lore: '"La superviviente favorita de la comunidad ahora en la línea de figuras más prestigiosa del mundo."',
     perks: [
       { name: 'Articulación Total', desc: 'Poses infinitas para recrear persecuciones y reparaciones.' },
@@ -765,7 +765,7 @@ export const MENU_ITEMS = [
     ],
     ingredients: ['Plástico ABS y PVC no tóxico', 'Altura: 100mm aprox.', 'Soporte transparente articulado y base con logotipo DBD', 'Caja de colección con ventana japonesa'],
     spiciness: 0,
-    tags: ['Figuras', 'Nendoroid', 'Feng Min', 'Colección']
+    tags: ['Figuras', 'Chibi', 'Feng Min', 'Colección']
   },
 
   // =========================================================================
@@ -1026,7 +1026,7 @@ export const MENU_ITEMS = [
       { name: 'Papel Artístico 100% Algodón', desc: 'Textura mate rugosa que realza las tintas minerales.' },
       { name: 'Resistente a la Decoloración UV', desc: 'Tintas pigmentadas de archivo garantizadas por más de 50 años.' }
     ],
-    ingredients: ['4 láminas individuales de 30 x 40 cm', 'Papel Fine Art de 300 g/m²', 'Sello en relieve con el logotipo oficial DBD', 'No incluye marcos'],
+    ingredients: ['4 láminas individuales de 30 x 40 cm', 'Papel Fine Art de 300 g/m²', 'Sello en relieve de La Niebla Store', 'No incluye marcos'],
     spiciness: 0,
     tags: ['Posters', 'Láminas', 'Arte', 'Mapas', 'Fine Art']
   },

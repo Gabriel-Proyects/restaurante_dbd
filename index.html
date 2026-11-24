@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Niebla Store | Tienda Oficial de Merchandising Dead by Daylight</title>
+  <title>La Niebla Store | Fan Store de Merch inspirado en Dead by Daylight</title>
   <meta name="description" content="Colecciona, viste, sobrevive. La Niebla Store: snacks temáticos, ropa y streetwear, llaveros metálicos, peluches Chibi, réplicas y coleccionables de Dead by Daylight.">
   <meta name="keywords" content="Dead by Daylight, Tienda DBD, Merch DBD, Ropa Dead by Daylight, Peluches DBD, Llaveros DBD, Snacks DBD, Bloodpoints, The Entity">
   
@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="styles/components.css">
   <link rel="stylesheet" href="styles/animations.css">
   <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/store.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
 </head>
 <body>
@@ -106,7 +107,7 @@
       <section class="hero-section">
         <div class="container hero-banner">
           <div class="hero-badge-top">
-            <span class="status-ember" aria-hidden="true"></span> MERCHANDISING OFICIAL INSPIRADO EN DEAD BY DAYLIGHT
+            <span class="status-ember" aria-hidden="true"></span> FAN STORE NO OFICIAL · INSPIRADA EN DEAD BY DAYLIGHT
           </div>
 
           <h1 class="hero-title">
@@ -342,17 +343,17 @@
               </div>
             </div>
 
-            <form id="mysteryBoxForm">
+            <form id="mysteryBoxForm" novalidate>
               <p class="reservation-notice">Regístrate para recibir la newsletter semanal de Dead by Daylight con acceso antes que nadie a las tiradas cortas de merch y réplicas exclusivas.</p>
               <div class="res-form-grid">
                 <div class="form-group">
                   <label for="mysteryName">Nombre o Gamertag *</label>
-                  <input type="text" id="mysteryName" class="form-control" placeholder="Ej. Dwight_99 o MegMain" required>
+                  <input type="text" id="mysteryName" class="form-control" placeholder="Ej. Dwight_99 o MegMain" required minlength="3" maxlength="20" autocomplete="nickname">
                 </div>
 
                 <div class="form-group">
                   <label for="mysteryEmail">Correo electrónico *</label>
-                  <input type="email" id="mysteryEmail" class="form-control" placeholder="tu-correo@gamer.com" required>
+                  <input type="email" id="mysteryEmail" class="form-control" placeholder="tu-correo@gamer.com" required maxlength="80" autocomplete="email">
                 </div>
 
                 <div class="form-group">
@@ -409,7 +410,7 @@
               </div>
             </div>
             <p>
-              Tienda oficial de merchandising temático inspirado en Dead by Daylight. Ropa, snacks, llaveros, peluches, figuras y réplicas de coleccionista.
+              Fan store escolar (no oficial) de merchandising inspirado en Dead by Daylight. Ropa, snacks, llaveros, peluches, figuras y réplicas de coleccionista.
             </p>
           </div>
 
@@ -448,7 +449,7 @@
         </div>
 
         <div class="footer-bottom">
-          <p>© 2026 La Niebla Store - Merchandising inspirado en el universo Dead by Daylight creado por Behaviour Interactive. Todos los derechos reservados.</p>
+          <p>© 2026 La Niebla Store · Proyecto escolar sin fines de lucro. Fan store no oficial: no está afiliada, patrocinada ni respaldada por Behaviour Interactive Inc. Dead by Daylight y sus personajes son marcas de sus respectivos dueños.</p>
         </div>
       </div>
     </footer>
@@ -487,7 +488,7 @@
 
         <div class="modal-order-ctrls">
           <div class="form-group">
-            <label for="modalDishNotes">Notas especiales para tu pedido (Talla, dedicatoria, etc.):</label>
+            <label for="modalDishNotes">Notas para tu pedido (opcional):</label>
             <textarea id="modalDishNotes" class="notes-input" placeholder="Ej. Talla L para la hoodie, envolver para regalo gamer, etc..."></textarea>
           </div>
 
@@ -575,7 +576,7 @@
       <button class="modal-close" id="orderConfirmationClose">&times;</button>
       <span style="font-size: 3.5rem; display: block; margin-bottom: 12px;">🩸</span>
       <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: #fff; margin-bottom: 6px;">¡Orden Recibida en la Niebla!</h3>
-      <p style="color: #8e9aaf; font-size: 0.9rem; margin-bottom: 20px;">Tu pedido ha sido registrado en nuestro almacén. El equipo está preparando tu paquete con sello conmemorativo del Ente.</p>
+      <p style="color: #8e9aaf; font-size: 0.9rem; margin-bottom: 20px;">Pedido simulado registrado (proyecto escolar: no se realizó ningún cobro). Guarda tu código para consultarlo en Envíos &amp; Rastreo.</p>
 
       <div class="res-ticket">
         <div class="res-ticket-header">

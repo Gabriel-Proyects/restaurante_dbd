@@ -5,6 +5,9 @@ import { MENU_CATEGORIES, MENU_ITEMS, REALMS } from './menu-data.js';
 import { audio } from './audio.js';
 import { SkillCheckGame } from './skill-check.js';
 import { CartManager } from './cart.js';
+import { productIcon, categoryIcon, rarityStyle } from './product-art.js';
+import { isValidEmail, isValidTrackingCode, normalizeTrackingCode, clampQty, MAX_QTY_PER_ITEM, MAX_NOTE_LENGTH, escapeHtml, formatMoney } from './validation.js';
+import { findOrder, DEMO_TRACKING_CODE, SHIPPING_METHODS } from './orders.js';
 
 class DBDApp {
   constructor() {
@@ -158,7 +161,7 @@ class DBDApp {
 
     container.innerHTML = MENU_CATEGORIES.map(cat => `
       <button class="filter-tab ${cat.id === this.currentCategory ? 'active' : ''}" data-category="${cat.id}">
-        <span class="tab-icon">${cat.icon}</span>
+        <span class="tab-icon">${categoryIcon(cat.id)}</span>
         <span class="tab-label">${cat.name}</span>
       </button>
     `).join('');
@@ -265,11 +268,9 @@ class DBDApp {
         </div>
 
         <!-- Product Visual Representation -->
-        <div class="card-visual">
-          <div class="perk-diamond-frame">
-            <span class="dish-emoji">${item.imageFallback}</span>
-            <div class="perk-glow"></div>
-          </div>
+        <div class="card-visual product-art" style="${rarityStyle(item.rarity)}">
+          <span class="art-code">N°${item.id.toUpperCase()}</span>
+          <div class="art-icon">${productIcon(item.id)}</div>
           <span class="card-char-name">${item.character}</span>
         </div>
 
@@ -365,7 +366,14 @@ class DBDApp {
         e.stopPropagation();
         const id = e.currentTarget.getAttribute('data-id');
         const product = MENU_ITEMS.find(d => d.id === id);
-        if (product) this.cart.addItem(product, 1);
+        if (!product) return;
+        if (this.needsSize(product)) {
+          // La ropa necesita talla: se abre la ficha para elegirla.
+          this.openProductModal(id);
+          this.cart.showToast('Elige tu talla antes de agregar la prenda.');
+          return;
+        }
+        this.cart.addItem(product, 1);
       });
     });
 
@@ -412,7 +420,9 @@ class DBDApp {
     const catObj = MENU_CATEGORIES.find(c => c.id === product.category);
     const catName = catObj ? catObj.name : 'Merch';
 
-    if (iconEl) iconEl.textContent = product.imageFallback;
+    if (iconEl) iconEl.innerHTML = productIcon(product.id);
+    const heroEl = modal.querySelector('.modal-hero-visual');
+    if (heroEl) heroEl.setAttribute('style', rarityStyle(product.rarity));
     if (rarityEl) {
       rarityEl.className = `rarity-pill rarity-${product.rarity}`;
       rarityEl.innerHTML = `💎 ${product.rarityLabel} (${catName})`;
@@ -443,10 +453,76 @@ class DBDApp {
     if (bpEl) bpEl.textContent = `${product.priceBP.toLocaleString()} BP`;
     if (moneyEl) moneyEl.textContent = `$${product.priceMoney.toFixed(2)} MXN`;
     if (qtyInput) qtyInput.value = '1';
-    if (noteInput) noteInput.value = '';
+    if (noteInput) {
+      noteInput.value = '';
+      noteInput.classList.remove('input-error');
+      noteInput.setAttribute('maxlength', String(MAX_NOTE_LENGTH));
+      noteInput.placeholder = 'Opcional: dedicatoria, envolver para regalo, etc.';
+      this.updateNoteCounter();
+    }
+    this.renderSizePicker(product);
 
     modal.classList.add('active');
     audio.playClick();
+  }
+
+  /** Prendas con talla (la gorra es de ajuste universal). */
+  needsSize(product) {
+    return product && product.category === 'ropa' && product.id !== 'rop3';
+  }
+
+  renderSizePicker(product) {
+    this.selectedSize = '';
+    let picker = document.getElementById('modalSizePicker');
+    if (!this.needsSize(product)) {
+      if (picker) picker.remove();
+      return;
+    }
+    if (!picker) {
+      const anchor = document.querySelector('#dishDetailModal .modal-order-ctrls');
+      if (!anchor) return;
+      picker = document.createElement('div');
+      picker.id = 'modalSizePicker';
+      picker.className = 'size-picker';
+      anchor.prepend(picker);
+    }
+    const sizes = product.id === 'rop5' ? ['22-24', '25-27', '28-30'] : ['CH', 'M', 'G', 'XG'];
+    picker.classList.remove('has-error');
+    picker.innerHTML = `
+      <span class="size-label" id="sizeLabel">Talla <em>(obligatoria)</em></span>
+      <div class="size-options" role="radiogroup" aria-labelledby="sizeLabel">
+        ${sizes.map(s => `<button type="button" class="size-chip" role="radio" aria-checked="false" data-size="${s}">${s}</button>`).join('')}
+      </div>
+      <span class="size-error">Elige una talla para continuar.</span>`;
+    picker.querySelectorAll('.size-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        this.selectedSize = chip.dataset.size;
+        picker.classList.remove('has-error');
+        picker.querySelectorAll('.size-chip').forEach(c => {
+          const on = c === chip;
+          c.classList.toggle('active', on);
+          c.setAttribute('aria-checked', on ? 'true' : 'false');
+        });
+        audio.playClick();
+      });
+    });
+  }
+
+  updateNoteCounter() {
+    const noteInput = document.getElementById('modalDishNotes');
+    if (!noteInput) return;
+    let counter = document.getElementById('modalNoteCounter');
+    if (!counter) {
+      counter = document.createElement('span');
+      counter.id = 'modalNoteCounter';
+      counter.className = 'note-counter';
+      noteInput.insertAdjacentElement('afterend', counter);
+      noteInput.addEventListener('input', () => {
+        noteInput.classList.remove('input-error');
+        this.updateNoteCounter();
+      });
+    }
+    counter.textContent = `${noteInput.value.length}/${MAX_NOTE_LENGTH}`;
   }
 
   closeProductModal() {
@@ -497,15 +573,61 @@ class DBDApp {
       trackingForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const input = document.getElementById('trackingInput');
-        const code = input ? input.value.trim().toUpperCase() : 'DBD-MERCH-849201';
-        if (!code) return;
+        const code = normalizeTrackingCode(input ? input.value : '');
+        const fail = (msg) => {
+          resultBox.style.display = 'none';
+          if (input) {
+            input.classList.add('input-error');
+            input.setAttribute('aria-invalid', 'true');
+            input.focus();
+          }
+          this.cart.showToast(msg, 'error');
+        };
 
+        if (!code) return fail('Escribe tu código de rastreo.');
+        if (!isValidTrackingCode(code)) return fail('El código debe tener el formato DBD-MERCH-123456.');
+
+        const order = findOrder(code);
+        if (!order && code !== DEMO_TRACKING_CODE) {
+          return fail('No encontramos ese pedido. Revisa el código de tu recibo.');
+        }
+
+        if (input) {
+          input.value = code;
+          input.classList.remove('input-error');
+          input.setAttribute('aria-invalid', 'false');
+        }
         if (codeDisplay) codeDisplay.textContent = code;
+        this.renderTrackingOrder(resultBox, order);
         resultBox.style.display = 'block';
         resultBox.scrollIntoView({ behavior: 'smooth' });
         audio.playClick();
       });
     }
+  }
+
+  /** Muestra los datos de un pedido real del historial (o la demo si order es null). */
+  renderTrackingOrder(resultBox, order) {
+    let info = resultBox.querySelector('.tracking-order-info');
+    if (!order) {
+      if (info) info.remove();
+      return;
+    }
+    if (!info) {
+      info = document.createElement('div');
+      info.className = 'tracking-order-info';
+      resultBox.prepend(info);
+    }
+    const created = new Date(order.createdAt);
+    const eta = new Date(created);
+    eta.setDate(eta.getDate() + (order.etaDays || 6));
+    const fmt = d => d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long' });
+    const pieces = order.items.reduce((s, it) => s + it.quantity, 0);
+    const method = SHIPPING_METHODS[order.shippingMethod];
+    info.innerHTML = `
+      <strong>Pedido de ${escapeHtml(order.customer.name)}</strong>
+      <span>${pieces} ${pieces === 1 ? 'pieza' : 'piezas'} · ${formatMoney(order.total)} · ${method ? method.label : 'Envío estándar'}</span>
+      <span>Realizado el ${fmt(created)} · Entrega estimada: ${fmt(eta)} en ${escapeHtml(order.address.city)}, ${escapeHtml(order.address.state)}</span>`;
   }
 
   // --- 9. INTERACTIVE PASSPORT (drops.html) ---
@@ -533,6 +655,15 @@ class DBDApp {
 
   // --- 10. EVENT LISTENERS ---
   bindEvents() {
+    // Al corregir un campo marcado con error, se limpia la marca
+    document.addEventListener('input', (e) => {
+      const el = e.target;
+      if (el && el.classList && el.classList.contains('input-error')) {
+        el.classList.remove('input-error');
+        el.setAttribute('aria-invalid', 'false');
+      }
+    });
+
     // Search input listener
     const searchInput = document.getElementById('menuSearchInput');
     if (searchInput) {
@@ -576,6 +707,10 @@ class DBDApp {
     if (modalQtyPlus && modalQtyInput) {
       modalQtyPlus.addEventListener('click', () => {
         const cur = parseInt(modalQtyInput.value, 10) || 1;
+        if (cur >= MAX_QTY_PER_ITEM) {
+          this.cart.showToast(`Máximo ${MAX_QTY_PER_ITEM} piezas por producto.`, 'error');
+          return;
+        }
         modalQtyInput.value = cur + 1;
       });
     }
@@ -585,8 +720,27 @@ class DBDApp {
     if (modalAddBtn) {
       modalAddBtn.addEventListener('click', () => {
         if (!this.selectedItem) return;
-        const qty = parseInt(modalQtyInput ? modalQtyInput.value : '1', 10) || 1;
-        const note = document.getElementById('modalDishNotes') ? document.getElementById('modalDishNotes').value.trim() : '';
+        const qty = clampQty(modalQtyInput ? modalQtyInput.value : '1');
+        const noteEl = document.getElementById('modalDishNotes');
+        let note = noteEl ? noteEl.value.trim() : '';
+        if (note.length > MAX_NOTE_LENGTH) {
+          this.cart.showToast(`La nota admite máximo ${MAX_NOTE_LENGTH} caracteres.`, 'error');
+          if (noteEl) noteEl.focus();
+          return;
+        }
+        if (this.needsSize(this.selectedItem)) {
+          const picker = document.getElementById('modalSizePicker');
+          if (!this.selectedSize) {
+            this.cart.showToast('Selecciona una talla antes de agregar la prenda.', 'error');
+            if (picker) {
+              picker.classList.add('has-error');
+              const first = picker.querySelector('button');
+              if (first) first.focus();
+            }
+            return;
+          }
+          note = `Talla ${this.selectedSize}${note ? ' · ' + note : ''}`;
+        }
         this.cart.addItem(this.selectedItem, qty, note);
         this.closeProductModal();
       });
@@ -610,11 +764,33 @@ class DBDApp {
       mysteryForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const emailInput = document.getElementById('mysteryEmail');
-        const email = emailInput ? emailInput.value : '';
-        if (email) {
-          this.cart.showToast(`¡Suscrito a los Drops de la Niebla! Revisa tu correo: ${email}`);
-          mysteryForm.reset();
+        const email = emailInput ? emailInput.value.trim() : '';
+        const nameInput = document.getElementById('mysteryName');
+        const gamertag = nameInput ? nameInput.value.trim() : '';
+        if (nameInput && !/^[A-Za-z0-9ÁÉÍÓÚÑáéíóúñ _.-]{3,20}$/.test(gamertag)) {
+          nameInput.classList.add('input-error');
+          nameInput.setAttribute('aria-invalid', 'true');
+          nameInput.focus();
+          this.cart.showToast('El nombre o gamertag debe tener de 3 a 20 caracteres (letras, números, _ . -).', 'error');
+          return;
         }
+        if (nameInput) {
+          nameInput.classList.remove('input-error');
+          nameInput.setAttribute('aria-invalid', 'false');
+        }
+        if (!isValidEmail(email)) {
+          if (emailInput) {
+            emailInput.classList.add('input-error');
+            emailInput.setAttribute('aria-invalid', 'true');
+            emailInput.focus();
+          }
+          this.cart.showToast(email ? 'Ese correo no tiene un formato válido.' : 'Escribe tu correo para suscribirte.', 'error');
+          return;
+        }
+        emailInput.classList.remove('input-error');
+        emailInput.setAttribute('aria-invalid', 'false');
+        this.cart.showToast(`Suscripción simulada registrada para ${email}.`);
+        mysteryForm.reset();
       });
     }
 
