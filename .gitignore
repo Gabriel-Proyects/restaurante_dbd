@@ -1,5 +1,6 @@
 # Herramientas / configuración local de Claude
 .claude/
+docs/
 
 # Documentación interna de evaluación
 EVALUACION_ECOMMERCE.md
